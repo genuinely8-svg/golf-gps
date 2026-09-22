@@ -1,0 +1,725 @@
+<title>그린파인더</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg: #F6F4EC;
+    --surface: #FFFFFF;
+    --surface-2: #EFEBDA;
+    --text: #1C2A20;
+    --text-muted: #63705F;
+    --accent: #2E6B4E;
+    --accent-strong: #1F5138;
+    --accent-ink: #F3FBF6;
+    --gold: #A9791F;
+    --line: rgba(28,42,32,0.13);
+    --danger: #A23B3B;
+    --shadow: 0 1px 2px rgba(28,42,32,0.06), 0 8px 24px -12px rgba(28,42,32,0.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: #0E1712;
+      --surface: #16211A;
+      --surface-2: #1C2A21;
+      --text: #E9F1E8;
+      --text-muted: #93A292;
+      --accent: #5FAE82;
+      --accent-strong: #7BC79B;
+      --accent-ink: #0C1710;
+      --gold: #D8B356;
+      --line: rgba(233,241,232,0.14);
+      --danger: #E08585;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #0E1712;
+    --surface: #16211A;
+    --surface-2: #1C2A21;
+    --text: #E9F1E8;
+    --text-muted: #93A292;
+    --accent: #5FAE82;
+    --accent-strong: #7BC79B;
+    --accent-ink: #0C1710;
+    --gold: #D8B356;
+    --line: rgba(233,241,232,0.14);
+    --danger: #E08585;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Work Sans', system-ui, -apple-system, sans-serif;
+    padding-inline:16px;
+    padding-block:0;
+  }
+  html, body{height:100%;}
+  h1,h2,h3{font-family:'Barlow Condensed', system-ui, sans-serif; margin:0;}
+
+  .app{
+    max-width:480px;
+    margin:0 auto;
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+    padding-bottom:28px;
+  }
+
+  .topbar{
+    position:sticky;
+    top:env(safe-area-inset-top, 0px);
+    background:var(--bg);
+    padding-block:14px 8px;
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:12px;
+    z-index:5;
+  }
+  .brand{
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:700;
+    font-size:24px;
+    letter-spacing:0.2px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .brand .flagicon{ color:var(--gold); font-size:20px; }
+  .gps-status{
+    font-size:11px;
+    font-weight:500;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--text-muted);
+    display:flex;
+    align-items:center;
+    gap:6px;
+    white-space:nowrap;
+  }
+  .gps-dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--text-muted);
+    flex:none;
+  }
+  .gps-dot.live{ background:var(--accent); box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+  .gps-dot.error{ background:var(--danger); }
+
+  .tabs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+    background:var(--surface-2);
+    border-radius:12px;
+    padding:4px;
+    margin-block-end:16px;
+  }
+  .tab{
+    appearance:none;
+    border:none;
+    background:transparent;
+    color:var(--text-muted);
+    font-family:'Work Sans', sans-serif;
+    font-weight:600;
+    font-size:13.5px;
+    padding-block:9px;
+    border-radius:9px;
+    cursor:pointer;
+  }
+  .tab.active{
+    background:var(--surface);
+    color:var(--text);
+    box-shadow:var(--shadow);
+  }
+  .tab:focus-visible, button:focus-visible, .chip:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:2px;
+  }
+
+  main{ flex:1; display:flex; flex-direction:column; }
+  .mode-panel{ display:flex; flex-direction:column; gap:14px; }
+
+  .distance-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:32px 20px 24px;
+    text-align:center;
+    box-shadow:var(--shadow);
+  }
+  .distance-value{
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:700;
+    font-size:76px;
+    line-height:1;
+    font-variant-numeric:tabular-nums;
+    letter-spacing:-0.01em;
+  }
+  .distance-unit{
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--text-muted);
+    margin-top:4px;
+  }
+  .accuracy{
+    margin-top:14px;
+    font-size:12px;
+    color:var(--text-muted);
+    min-height:16px;
+  }
+
+  .primary-btn{
+    appearance:none;
+    border:none;
+    background:var(--accent);
+    color:var(--accent-ink);
+    font-family:'Work Sans', sans-serif;
+    font-weight:600;
+    font-size:15px;
+    padding-block:14px;
+    border-radius:14px;
+    cursor:pointer;
+    width:100%;
+  }
+  .primary-btn:active{ background:var(--accent-strong); }
+  .primary-btn:disabled{ opacity:0.5; cursor:default; }
+
+  .secondary-btn{
+    appearance:none;
+    border:1.5px solid var(--accent);
+    background:transparent;
+    color:var(--accent-strong);
+    font-family:'Work Sans', sans-serif;
+    font-weight:600;
+    font-size:14px;
+    padding-block:12px;
+    border-radius:12px;
+    cursor:pointer;
+    width:100%;
+  }
+
+  .text-btn{
+    appearance:none;
+    border:none;
+    background:transparent;
+    color:var(--text-muted);
+    font-size:12.5px;
+    font-weight:500;
+    cursor:pointer;
+    text-decoration:underline;
+    text-underline-offset:2px;
+    padding:0;
+  }
+
+  .pin-info{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:12px 14px;
+    font-size:13px;
+    color:var(--text-muted);
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .pin-info strong{ color:var(--text); font-weight:600; }
+
+  .shot-actions{ display:flex; flex-direction:column; gap:10px; }
+
+  .club-picker{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    box-shadow:var(--shadow);
+  }
+  .club-picker-label{
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--text-muted);
+  }
+  .club-chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .chip{
+    appearance:none;
+    border:1.5px solid var(--line);
+    background:var(--surface-2);
+    color:var(--text);
+    font-family:'Work Sans', sans-serif;
+    font-size:13px;
+    font-weight:500;
+    padding:8px 13px;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .chip.selected{
+    border-color:var(--accent);
+    background:color-mix(in srgb, var(--accent) 16%, var(--surface));
+    color:var(--accent-strong);
+    font-weight:600;
+  }
+
+  .log-section{ margin-top:6px; display:flex; flex-direction:column; gap:10px; }
+  .log-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:600;
+    font-size:19px;
+  }
+  .log-list{ display:flex; flex-direction:column; gap:8px; }
+  .log-row{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:13px;
+    padding:11px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .log-row-left{ display:flex; flex-direction:column; gap:2px; }
+  .log-club{ font-size:13.5px; font-weight:600; }
+  .log-time{ font-size:11.5px; color:var(--text-muted); }
+  .log-dist{
+    font-family:'Barlow Condensed', sans-serif;
+    font-weight:700;
+    font-size:24px;
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+  }
+  .log-dist span{ font-size:12px; font-weight:500; color:var(--text-muted); margin-left:2px; }
+  .log-empty{
+    text-align:center;
+    color:var(--text-muted);
+    font-size:13px;
+    padding-block:18px;
+    border:1px dashed var(--line);
+    border-radius:13px;
+  }
+
+  .start-overlay{
+    position:fixed;
+    inset:0;
+    background:var(--bg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    z-index:20;
+  }
+  .start-card{
+    max-width:340px;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+  }
+  .start-icon{ font-size:44px; }
+  .start-card h1{ font-size:32px; font-weight:700; }
+  .start-card p{ font-size:14px; color:var(--text-muted); line-height:1.5; margin:0; }
+  .start-note{ font-size:12px !important; }
+  .start-error-box{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    width:100%;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px;
+    text-align:left;
+  }
+  .start-error{
+    color:var(--danger);
+    font-size:13px;
+    font-weight:600;
+    margin:0;
+  }
+  .start-error-help{
+    color:var(--text-muted);
+    font-size:12px;
+    line-height:1.5;
+    margin:0;
+  }
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><span class="flagicon">&#9971;</span>그린파인더</div>
+    <div class="gps-status"><span class="gps-dot" id="gpsDot"></span><span id="gpsStatusText">대기중</span></div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" id="tabPin" type="button">핀까지 거리</button>
+    <button class="tab" id="tabShot" type="button">샷 거리 기록</button>
+  </nav>
+
+  <main>
+    <section id="pinMode" class="mode-panel">
+      <div class="distance-card">
+        <div class="distance-value" id="pinDistance">--</div>
+        <div class="distance-unit">미터 · 핀까지</div>
+        <div class="accuracy" id="pinAccuracy">위치를 확인하는 중...</div>
+      </div>
+      <button class="primary-btn" id="setPinBtn">현재 위치를 핀으로 저장</button>
+      <div class="pin-info" id="pinInfo" hidden>
+        <span>핀 저장 시각</span>
+        <strong id="pinSavedAt">--</strong>
+      </div>
+    </section>
+
+    <section id="shotMode" class="mode-panel" hidden>
+      <div class="distance-card">
+        <div class="distance-value" id="shotDistance">--</div>
+        <div class="distance-unit">미터 · 출발지점부터</div>
+        <div class="accuracy" id="shotAccuracy">출발 지점을 먼저 저장하세요</div>
+      </div>
+      <div class="shot-actions">
+        <button class="primary-btn" id="startShotBtn">출발 지점 저장 (스윙 전)</button>
+        <button class="primary-btn" id="finishShotBtn" hidden>도착 · 거리 기록하기</button>
+      </div>
+      <div class="club-picker" id="clubPicker" hidden>
+        <div class="club-picker-label">사용한 클럽 (선택)</div>
+        <div class="club-chips" id="clubChips"></div>
+        <button class="secondary-btn" id="saveShotBtn">이 거리 기록 저장</button>
+      </div>
+
+      <div class="log-section">
+        <div class="log-header">
+          <span>오늘의 샷 기록</span>
+          <button class="text-btn" id="clearLogBtn">전체 삭제</button>
+        </div>
+        <div class="log-list" id="logList"></div>
+        <div class="log-empty" id="logEmpty">아직 기록된 샷이 없어요</div>
+      </div>
+    </section>
+  </main>
+
+  <div class="start-overlay" id="startOverlay">
+    <div class="start-card">
+      <div class="start-icon">&#9971;</div>
+      <h1>그린파인더</h1>
+      <p>휴대폰 GPS로 핀까지 거리와 클럽별 샷 거리를 재는 도구예요. 정확한 측정을 위해 위치 권한을 허용해주세요.</p>
+      <button class="primary-btn" id="enableGpsBtn">위치 사용 시작</button>
+      <p class="start-note">GPS 오차는 보통 ±3~10m예요. 정밀 거리측정기가 아닌 참고용으로 사용하세요.</p>
+      <div class="start-error-box" id="startErrorBox" hidden>
+        <p class="start-error" id="startError"></p>
+        <p class="start-error-help">해결법: 사파리 주소창 왼쪽 "AA" 아이콘 → 웹 사이트 설정 → 위치를 "허용"으로 변경 후 새로고침. 그래도 안 되면 설정 → Safari → 고급 → 웹 사이트 데이터에서 이 사이트를 지우고 다시 열어주세요.</p>
+        <button class="secondary-btn" id="retryGpsBtn">위치 권한 다시 요청</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var CLUBS = ["드라이버","우드","하이브리드","아이언","웨지","퍼터","기타"];
+
+  var state = {
+    mode: "pin",
+    currentPos: null,   // {lat, lon, accuracy}
+    pinPos: null,       // {lat, lon, accuracy, savedAt}
+    shotStart: null,    // {lat, lon, accuracy, savedAt}
+    pendingShotDistance: null,
+    selectedClub: null,
+    log: []
+  };
+
+  function safeLoad(key, fallback){
+    try{
+      var raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    }catch(e){ return fallback; }
+  }
+  function safeSave(key, value){
+    try{ localStorage.setItem(key, JSON.stringify(value)); }catch(e){}
+  }
+
+  state.pinPos = safeLoad("gf_pin", null);
+  state.log = safeLoad("gf_log", []);
+
+  function toRad(d){ return d * Math.PI / 180; }
+  function distMeters(a, b){
+    if(!a || !b) return null;
+    var R = 6371000;
+    var dLat = toRad(b.lat - a.lat);
+    var dLon = toRad(b.lon - a.lon);
+    var s = Math.sin(dLat/2)*Math.sin(dLat/2) +
+            Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) *
+            Math.sin(dLon/2)*Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(s), Math.sqrt(1-s));
+    return R * c;
+  }
+  function fmtDist(m){
+    if(m === null || m === undefined) return "--";
+    if(m < 10) return m.toFixed(1);
+    return Math.round(m).toString();
+  }
+  function fmtTime(ts){
+    var d = new Date(ts);
+    var h = d.getHours().toString().padStart(2,"0");
+    var mi = d.getMinutes().toString().padStart(2,"0");
+    return h + ":" + mi;
+  }
+
+  // Elements
+  var els = {
+    gpsDot: document.getElementById("gpsDot"),
+    gpsStatusText: document.getElementById("gpsStatusText"),
+    tabPin: document.getElementById("tabPin"),
+    tabShot: document.getElementById("tabShot"),
+    pinMode: document.getElementById("pinMode"),
+    shotMode: document.getElementById("shotMode"),
+    pinDistance: document.getElementById("pinDistance"),
+    pinAccuracy: document.getElementById("pinAccuracy"),
+    setPinBtn: document.getElementById("setPinBtn"),
+    pinInfo: document.getElementById("pinInfo"),
+    pinSavedAt: document.getElementById("pinSavedAt"),
+    shotDistance: document.getElementById("shotDistance"),
+    shotAccuracy: document.getElementById("shotAccuracy"),
+    startShotBtn: document.getElementById("startShotBtn"),
+    finishShotBtn: document.getElementById("finishShotBtn"),
+    clubPicker: document.getElementById("clubPicker"),
+    clubChips: document.getElementById("clubChips"),
+    saveShotBtn: document.getElementById("saveShotBtn"),
+    logList: document.getElementById("logList"),
+    logEmpty: document.getElementById("logEmpty"),
+    clearLogBtn: document.getElementById("clearLogBtn"),
+    startOverlay: document.getElementById("startOverlay"),
+    enableGpsBtn: document.getElementById("enableGpsBtn"),
+    startErrorBox: document.getElementById("startErrorBox"),
+    startError: document.getElementById("startError"),
+    retryGpsBtn: document.getElementById("retryGpsBtn")
+  };
+
+  // Build club chips
+  CLUBS.forEach(function(club){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip";
+    b.textContent = club;
+    b.addEventListener("click", function(){
+      state.selectedClub = club;
+      Array.prototype.forEach.call(els.clubChips.children, function(c){
+        c.classList.toggle("selected", c === b);
+      });
+    });
+    els.clubChips.appendChild(b);
+  });
+
+  function setMode(mode){
+    state.mode = mode;
+    els.tabPin.classList.toggle("active", mode === "pin");
+    els.tabShot.classList.toggle("active", mode === "shot");
+    els.pinMode.hidden = mode !== "pin";
+    els.shotMode.hidden = mode !== "shot";
+  }
+  els.tabPin.addEventListener("click", function(){ setMode("pin"); });
+  els.tabShot.addEventListener("click", function(){ setMode("shot"); });
+
+  function renderPinInfo(){
+    if(state.pinPos){
+      els.pinInfo.hidden = false;
+      els.pinSavedAt.textContent = fmtTime(state.pinPos.savedAt);
+      els.setPinBtn.textContent = "핀 위치 다시 저장";
+    }else{
+      els.pinInfo.hidden = true;
+      els.setPinBtn.textContent = "현재 위치를 핀으로 저장";
+    }
+  }
+
+  function renderShotButtons(){
+    if(state.shotStart && !state.pendingShotDistance){
+      els.startShotBtn.hidden = true;
+      els.finishShotBtn.hidden = false;
+    }else{
+      els.startShotBtn.hidden = false;
+      els.finishShotBtn.hidden = true;
+    }
+    els.clubPicker.hidden = state.pendingShotDistance === null;
+  }
+
+  function renderLog(){
+    els.logList.innerHTML = "";
+    if(state.log.length === 0){
+      els.logEmpty.hidden = false;
+      return;
+    }
+    els.logEmpty.hidden = true;
+    state.log.slice().reverse().forEach(function(entry){
+      var row = document.createElement("div");
+      row.className = "log-row";
+      var left = document.createElement("div");
+      left.className = "log-row-left";
+      var club = document.createElement("div");
+      club.className = "log-club";
+      club.textContent = entry.club || "클럽 미지정";
+      var time = document.createElement("div");
+      time.className = "log-time";
+      time.textContent = fmtTime(entry.savedAt);
+      left.appendChild(club);
+      left.appendChild(time);
+      var dist = document.createElement("div");
+      dist.className = "log-dist";
+      dist.innerHTML = fmtDist(entry.distance) + "<span>m</span>";
+      row.appendChild(left);
+      row.appendChild(dist);
+      els.logList.appendChild(row);
+    });
+  }
+
+  function updateLiveDistances(){
+    if(state.mode === "pin" || true){
+      if(state.pinPos && state.currentPos){
+        var d = distMeters(state.currentPos, state.pinPos);
+        els.pinDistance.textContent = fmtDist(d);
+        els.pinAccuracy.textContent = "내 위치 정확도 ±" + Math.round(state.currentPos.accuracy) + "m";
+      }else if(state.currentPos){
+        els.pinDistance.textContent = "--";
+        els.pinAccuracy.textContent = "핀 위치를 저장하면 거리가 표시돼요";
+      }
+    }
+    if(state.shotStart && state.currentPos && state.pendingShotDistance === null){
+      var sd = distMeters(state.shotStart, state.currentPos);
+      els.shotDistance.textContent = fmtDist(sd);
+      els.shotAccuracy.textContent = "내 위치 정확도 ±" + Math.round(state.currentPos.accuracy) + "m · 걸으면서 갱신돼요";
+    }else if(state.pendingShotDistance !== null){
+      els.shotDistance.textContent = fmtDist(state.pendingShotDistance);
+      els.shotAccuracy.textContent = "클럽을 선택하고 기록을 저장하세요";
+    }else{
+      els.shotDistance.textContent = "--";
+      els.shotAccuracy.textContent = "출발 지점을 먼저 저장하세요";
+    }
+  }
+
+  els.setPinBtn.addEventListener("click", function(){
+    if(!state.currentPos) return;
+    state.pinPos = {
+      lat: state.currentPos.lat,
+      lon: state.currentPos.lon,
+      accuracy: state.currentPos.accuracy,
+      savedAt: Date.now()
+    };
+    safeSave("gf_pin", state.pinPos);
+    renderPinInfo();
+    updateLiveDistances();
+  });
+
+  els.startShotBtn.addEventListener("click", function(){
+    if(!state.currentPos) return;
+    state.shotStart = {
+      lat: state.currentPos.lat,
+      lon: state.currentPos.lon,
+      accuracy: state.currentPos.accuracy,
+      savedAt: Date.now()
+    };
+    state.pendingShotDistance = null;
+    state.selectedClub = null;
+    Array.prototype.forEach.call(els.clubChips.children, function(c){ c.classList.remove("selected"); });
+    renderShotButtons();
+    updateLiveDistances();
+  });
+
+  els.finishShotBtn.addEventListener("click", function(){
+    if(!state.shotStart || !state.currentPos) return;
+    state.pendingShotDistance = distMeters(state.shotStart, state.currentPos);
+    renderShotButtons();
+    updateLiveDistances();
+  });
+
+  els.saveShotBtn.addEventListener("click", function(){
+    if(state.pendingShotDistance === null) return;
+    state.log.push({
+      id: Date.now(),
+      club: state.selectedClub,
+      distance: state.pendingShotDistance,
+      savedAt: Date.now()
+    });
+    safeSave("gf_log", state.log);
+    state.shotStart = null;
+    state.pendingShotDistance = null;
+    state.selectedClub = null;
+    Array.prototype.forEach.call(els.clubChips.children, function(c){ c.classList.remove("selected"); });
+    renderShotButtons();
+    renderLog();
+    updateLiveDistances();
+  });
+
+  els.clearLogBtn.addEventListener("click", function(){
+    state.log = [];
+    safeSave("gf_log", state.log);
+    renderLog();
+  });
+
+  function onPosition(pos){
+    state.currentPos = {
+      lat: pos.coords.latitude,
+      lon: pos.coords.longitude,
+      accuracy: pos.coords.accuracy || 15
+    };
+    els.gpsDot.className = "gps-dot live";
+    els.gpsStatusText.textContent = "실시간 위치";
+    els.startOverlay.remove();
+    updateLiveDistances();
+  }
+  var watchId = null;
+
+  function onPositionError(err){
+    els.gpsDot.className = "gps-dot error";
+    els.gpsStatusText.textContent = "위치 오류";
+    els.startErrorBox.hidden = false;
+    if(err && err.code === 1){
+      els.startError.textContent = "위치 권한이 거부된 상태예요.";
+    }else if(err && err.code === 2){
+      els.startError.textContent = "위치를 확인할 수 없어요. GPS 신호가 잘 잡히는 곳에서 시도해주세요.";
+    }else if(err && err.code === 3){
+      els.startError.textContent = "위치 확인이 시간 초과됐어요. 다시 시도해주세요.";
+    }else{
+      els.startError.textContent = "위치를 가져오지 못했어요.";
+    }
+  }
+
+  function requestGps(){
+    els.startErrorBox.hidden = true;
+    if(!("geolocation" in navigator)){
+      els.startErrorBox.hidden = false;
+      els.startError.textContent = "이 브라우저는 위치 기능을 지원하지 않아요.";
+      return;
+    }
+    els.gpsStatusText.textContent = "위치 확인 중...";
+    if(watchId !== null){
+      navigator.geolocation.clearWatch(watchId);
+    }
+    watchId = navigator.geolocation.watchPosition(onPosition, onPositionError, {
+      enableHighAccuracy: true,
+      maximumAge: 2000,
+      timeout: 15000
+    });
+  }
+
+  els.enableGpsBtn.addEventListener("click", requestGps);
+  els.retryGpsBtn.addEventListener("click", requestGps);
+
+  // Initial render
+  renderPinInfo();
+  renderShotButtons();
+  renderLog();
+  updateLiveDistances();
+})();
+</script>
