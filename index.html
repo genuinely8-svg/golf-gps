@@ -167,6 +167,14 @@
   .stp.done{color:var(--lime);}
   .stp.done i{background:var(--lime);color:var(--on-lime);border-color:var(--lime);}
 
+  .warn{
+    display:none;align-items:flex-start;gap:10px;
+    background:rgba(255,92,92,.10);border:1px solid rgba(255,92,92,.35);border-radius:16px;
+    padding:12px 14px;font-size:14px;line-height:1.5;color:#FFC2C2;
+  }
+  .warn.on{display:flex;}
+  .warn svg{width:20px;height:20px;flex:none;margin-top:1px;color:var(--red);}
+  .warn b{color:#fff;}
   .hint{
     font-size:14px;line-height:1.6;color:var(--muted);
     border-left:3px solid var(--lime);
@@ -374,6 +382,10 @@
 </header>
 
 <main>
+  <div class="warn" id="warn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/></svg>
+    <div id="warnText"></div>
+  </div>
   <!-- 샷 거리 -->
   <section class="screen on" id="scrShot">
     <div class="gauge-wrap" id="shotGauge">
@@ -577,6 +589,7 @@
   function setArc(el,m,max){
     var f=m==null?0:Math.max(0,Math.min(1,m/max));
     el.setAttribute("stroke-dasharray",(ARC*f).toFixed(1)+" "+CIRC);
+    el.style.opacity = f>0 ? 1 : 0;   // 0m일 때 둥근 끝점만 남는 것 방지
   }
 
   var toastTimer=null;
@@ -662,6 +675,7 @@
   /* ---------- 동작 ---------- */
   function onMain(){
     if(S.busy || !S.pos) return;
+    if(S.pos.acc>WEAK && !confirm("GPS 신호가 약해서 오차가 ±"+Math.round(S.pos.acc)+"m 이상일 수 있어요.\n그래도 찍을까요?")) return;
     if(S.tab==="shot"){
       if(!S.shotStart){
         capture(function(p){
@@ -756,6 +770,14 @@
     var a=Math.round(S.pos.acc);
     E.gps.classList.add(a<=8?"good":a<=20?"fair":"bad");
     E.gpsText.textContent="±"+a+"m";
+  }
+  var WEAK=20;
+  function setWarn(){
+    var w=$("warn");
+    if(S.tab!=="log" && S.pos && S.pos.acc>WEAK){
+      $("warnText").innerHTML="<b>GPS 신호가 약해요 (±"+Math.round(S.pos.acc)+"m).</b><br>실내라면 하늘이 트인 밖으로 나가 주세요. 신호 표시가 초록색일 때 찍으면 정확해요.";
+      w.classList.add("on");
+    }else w.classList.remove("on");
   }
   function setStep(n){
     [E.st1,E.st2,E.st3].forEach(function(el,i){
@@ -877,7 +899,7 @@
   }
 
   function render(){
-    setGpsBadge();
+    setGpsBadge();setWarn();
     renderShot();renderPin();renderLog();renderDock();
   }
 
