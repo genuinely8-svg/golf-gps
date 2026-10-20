@@ -3,155 +3,203 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#F4F2EA" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0F1612" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#07090C">
+<meta name="color-scheme" content="dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="그린파인더">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
 <title>그린파인더</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&display=swap">
 <style>
   :root{
-    --bg:#F4F2EA;
-    --surface:#FFFFFF;
-    --surface-2:#E9E6DA;
-    --text:#14211A;
-    --muted:#5E6B62;
-    --accent:#1F6B47;
-    --accent-press:#17533A;
-    --on-accent:#FFFFFF;
-    --gold:#B07A12;
-    --line:rgba(20,33,26,.12);
-    --danger:#B23A3A;
-    --shadow:0 1px 2px rgba(20,33,26,.06),0 10px 30px -14px rgba(20,33,26,.25);
-    --tabbar-h:64px;
+    --bg:#07090C;
+    --surface:#10151B;
+    --surface-2:#18202A;
+    --surface-3:#212B37;
+    --line:rgba(255,255,255,.07);
+    --line-2:rgba(255,255,255,.12);
+    --text:#F2F5F7;
+    --muted:#8693A1;
+    --dim:#55606C;
+    --lime:#C8F53A;
+    --lime-press:#B0DB27;
+    --on-lime:#0B1003;
+    --orange:#FF7A1A;
+    --red:#FF5C5C;
+    --tabbar-h:66px;
     --safe-b:env(safe-area-inset-bottom,0px);
     --safe-t:env(safe-area-inset-top,0px);
-  }
-  @media (prefers-color-scheme:dark){
-    :root{
-      --bg:#0F1612;
-      --surface:#18221C;
-      --surface-2:#223028;
-      --text:#EAF2EC;
-      --muted:#97A89C;
-      --accent:#3FA572;
-      --accent-press:#338A5E;
-      --on-accent:#06120B;
-      --gold:#E0B44E;
-      --line:rgba(234,242,236,.12);
-      --danger:#E58383;
-      --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.6);
-    }
   }
 
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   [hidden]{display:none!important;}
-  html,body{margin:0;height:100%;}
+  html,body{margin:0;min-height:100%;}
+  html{background:var(--bg);}
   body{
-    background:var(--bg);
     color:var(--text);
+    background:
+      radial-gradient(120% 60% at 50% -10%, rgba(200,245,58,.10), transparent 60%),
+      radial-gradient(80% 50% at 100% 100%, rgba(255,122,26,.06), transparent 60%),
+      var(--bg);
+    background-attachment:fixed;
     font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
     -webkit-font-smoothing:antialiased;
     overscroll-behavior:none;
     touch-action:manipulation;
     -webkit-user-select:none;user-select:none;
   }
+  body::before{ /* 런치모니터 느낌의 옅은 격자 */
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+    background-size:28px 28px;
+    -webkit-mask-image:linear-gradient(to bottom,#000 0%,transparent 70%);
+            mask-image:linear-gradient(to bottom,#000 0%,transparent 70%);
+  }
   button{font:inherit;color:inherit;touch-action:manipulation;}
   .num{font-family:"Barlow Condensed",system-ui,sans-serif;font-variant-numeric:tabular-nums;}
+  .cap{font-family:"Barlow Condensed",system-ui,sans-serif;font-weight:600;letter-spacing:.14em;text-transform:uppercase;}
 
   /* ---------- 상단 ---------- */
   .top{
     position:sticky;top:0;z-index:10;
-    background:var(--bg);
-    padding:calc(var(--safe-t) + 12px) 20px 10px;
+    padding:calc(var(--safe-t) + 14px) 20px 10px;
     display:flex;align-items:center;justify-content:space-between;gap:12px;
+    background:linear-gradient(to bottom,var(--bg) 60%,transparent);
   }
-  .brand{font-size:20px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:8px;}
-  .brand svg{width:22px;height:22px;color:var(--accent);}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-mark{
+    width:34px;height:34px;border-radius:10px;
+    background:var(--lime);color:var(--on-lime);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 24px -4px rgba(200,245,58,.55);
+  }
+  .brand-mark svg{width:20px;height:20px;}
+  .brand-name{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.1;}
+  .brand-sub{font-size:10.5px;color:var(--muted);margin-top:1px;}
   .gps{
-    display:flex;align-items:center;gap:7px;
-    background:var(--surface);border:1px solid var(--line);
-    padding:7px 12px;border-radius:999px;
+    display:flex;align-items:center;gap:8px;
+    background:rgba(255,255,255,.04);border:1px solid var(--line-2);
+    padding:7px 12px 7px 10px;border-radius:999px;
     font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;
   }
-  .gps i{width:8px;height:8px;border-radius:50%;background:var(--muted);display:block;}
-  .gps.good i{background:#2DB36B;box-shadow:0 0 0 3px rgba(45,179,107,.22);}
-  .gps.fair i{background:#E2A52C;box-shadow:0 0 0 3px rgba(226,165,44,.22);}
-  .gps.bad i{background:var(--danger);}
+  .gps-bars{display:flex;align-items:flex-end;gap:2px;height:13px;}
+  .gps-bars b{display:block;width:3px;border-radius:1px;background:var(--dim);}
+  .gps-bars b:nth-child(1){height:5px}.gps-bars b:nth-child(2){height:9px}.gps-bars b:nth-child(3){height:13px}
+  .gps.good .gps-bars b{background:var(--lime);}
+  .gps.fair .gps-bars b:nth-child(-n+2){background:var(--orange);}
+  .gps.bad .gps-bars b:nth-child(1){background:var(--red);}
+  .gps.good{color:var(--text);}
 
   /* ---------- 화면 공통 ---------- */
   main{
+    position:relative;z-index:1;
     max-width:520px;margin:0 auto;
-    padding:4px 20px calc(var(--tabbar-h) + var(--safe-b) + 112px);
+    padding:2px 20px calc(var(--tabbar-h) + var(--safe-b) + 116px);
   }
   .screen{display:none;flex-direction:column;gap:14px;}
-  .screen.on{display:flex;}
+  .screen.on{display:flex;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-  .hero{
-    background:var(--surface);border:1px solid var(--line);
-    border-radius:24px;box-shadow:var(--shadow);
-    padding:22px 20px 20px;text-align:center;
+  /* ---------- 게이지 ---------- */
+  .gauge-wrap{position:relative;width:100%;max-width:320px;margin:4px auto 0;aspect-ratio:1/1;}
+  .gauge-wrap svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+  .g-track{fill:none;stroke:var(--surface-3);stroke-width:14;stroke-linecap:round;}
+  .g-fill{fill:none;stroke:var(--lime);stroke-width:14;stroke-linecap:round;
+    filter:drop-shadow(0 0 10px rgba(200,245,58,.55));
+    transition:stroke-dasharray .6s cubic-bezier(.2,.8,.2,1);}
+  .pin-gauge .g-fill{stroke:var(--orange);filter:drop-shadow(0 0 10px rgba(255,122,26,.55));}
+  .g-tick{stroke:var(--dim);stroke-width:2;stroke-linecap:round;}
+  .g-tick.major{stroke:var(--muted);stroke-width:2.5;}
+  .g-lbl{fill:var(--dim);font-family:"Barlow Condensed",sans-serif;font-size:11px;font-weight:600;text-anchor:middle;dominant-baseline:middle;}
+  .g-center{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding-bottom:6%;
   }
-  .hero-label{font-size:14px;font-weight:600;color:var(--muted);}
-  .hero-value{font-size:104px;font-weight:700;line-height:.95;margin-top:6px;letter-spacing:-.01em;}
-  .hero-value small{font-size:30px;font-weight:600;color:var(--muted);margin-left:4px;}
-  .hero-sub{margin-top:8px;font-size:15px;font-weight:600;color:var(--muted);min-height:22px;}
-  .hero-sub b{color:var(--text);}
+  .g-label{font-size:13px;font-weight:600;color:var(--muted);}
+  .g-value{font-size:112px;font-weight:700;line-height:.86;margin-top:8px;letter-spacing:-.02em;}
+  .g-unit{font-size:15px;color:var(--lime);margin-top:6px;}
+  .pin-gauge .g-unit{color:var(--orange);}
+  .g-foot{
+    position:absolute;left:0;right:0;bottom:3%;
+    text-align:center;font-size:13.5px;font-weight:600;color:var(--muted);
+  }
 
-  .speed{
-    display:none;margin-top:16px;padding:14px 12px;
-    background:var(--surface-2);border-radius:16px;
-    align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
+  /* ---------- 수치 타일 ---------- */
+  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .tile{
+    background:linear-gradient(180deg,var(--surface-2),var(--surface));
+    border:1px solid var(--line);border-radius:18px;
+    padding:12px 12px 13px;min-height:86px;
+    display:flex;flex-direction:column;justify-content:space-between;
   }
-  .speed.on{display:flex;}
-  .speed span{font-size:14px;font-weight:600;color:var(--muted);}
-  .speed strong{font-size:34px;font-weight:700;color:var(--gold);line-height:1;}
-  .speed em{font-style:normal;font-size:14px;font-weight:700;color:var(--gold);}
+  .tile-k{font-size:10.5px;color:var(--muted);}
+  .tile-v{font-size:34px;font-weight:700;line-height:1;margin-top:8px;}
+  .tile-v small{font-size:14px;font-weight:600;color:var(--muted);margin-left:2px;}
+  .tile.hot{border-color:rgba(255,122,26,.35);background:linear-gradient(180deg,rgba(255,122,26,.16),var(--surface));}
+  .tile.hot .tile-v{color:var(--orange);}
+  .tile.hot .tile-k{color:#FFB07A;}
+  .tile-s{font-size:11px;color:var(--dim);margin-top:4px;font-weight:500;}
 
-  /* 단계 표시 */
-  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-  .step{
-    background:var(--surface);border:1px solid var(--line);border-radius:14px;
-    padding:10px 8px;text-align:center;font-size:13px;font-weight:600;color:var(--muted);
+  /* 진행 표시 */
+  .track{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+    background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:6px;
   }
-  .step b{display:block;font-size:12px;font-weight:700;margin-bottom:2px;opacity:.8;}
-  .step.now{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,var(--surface));}
-  .step.done{color:var(--text);}
-  .step.done b::after{content:" ✓";}
+  .stp{
+    border-radius:11px;padding:9px 4px;text-align:center;
+    font-size:13px;font-weight:700;color:var(--dim);
+    display:flex;align-items:center;justify-content:center;gap:6px;
+  }
+  .stp i{
+    width:18px;height:18px;border-radius:50%;font-style:normal;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-family:"Barlow Condensed",sans-serif;font-size:12px;
+    border:1.5px solid currentColor;
+  }
+  .stp.now{background:var(--lime);color:var(--on-lime);}
+  .stp.now i{border-color:var(--on-lime);}
+  .stp.done{color:var(--lime);}
+  .stp.done i{background:var(--lime);color:var(--on-lime);border-color:var(--lime);}
 
   .hint{
-    font-size:14px;line-height:1.55;color:var(--muted);
-    background:var(--surface);border:1px dashed var(--line);border-radius:16px;padding:14px 16px;
+    font-size:14px;line-height:1.6;color:var(--muted);
+    border-left:3px solid var(--lime);
+    background:rgba(200,245,58,.05);border-radius:4px 14px 14px 4px;padding:12px 14px;
   }
-  .hint b{color:var(--text);}
+  .hint b{color:var(--text);font-weight:700;}
 
   /* ---------- 하단 고정 버튼 ---------- */
   .dock{
     position:fixed;left:0;right:0;z-index:20;
     bottom:calc(var(--tabbar-h) + var(--safe-b));
-    padding:12px 20px 12px;
-    background:linear-gradient(to top,var(--bg) 70%,transparent);
+    padding:14px 20px 12px;
+    background:linear-gradient(to top,var(--bg) 62%,rgba(7,9,12,0));
   }
   .dock-inner{max-width:520px;margin:0 auto;display:flex;gap:10px;}
   .btn{
     appearance:none;border:none;cursor:pointer;
-    min-height:64px;border-radius:20px;
-    font-size:19px;font-weight:700;letter-spacing:-.01em;
+    min-height:66px;border-radius:22px;
+    font-size:19px;font-weight:800;letter-spacing:-.01em;
     display:flex;align-items:center;justify-content:center;gap:10px;
-    transition:transform .08s ease,background .15s ease;
+    transition:transform .08s ease,background .15s ease,box-shadow .2s ease;
   }
-  .btn:active{transform:scale(.98);}
-  .btn-main{flex:1;background:var(--accent);color:var(--on-accent);box-shadow:0 10px 24px -10px color-mix(in srgb,var(--accent) 70%,transparent);}
-  .btn-main:active{background:var(--accent-press);}
-  .btn-main[disabled]{background:var(--surface-2);color:var(--muted);box-shadow:none;cursor:default;}
+  .btn:active{transform:scale(.975);}
+  .btn-main{
+    flex:1;background:var(--lime);color:var(--on-lime);
+    box-shadow:0 0 0 1px rgba(200,245,58,.4),0 12px 34px -10px rgba(200,245,58,.6);
+  }
+  .btn-main:active{background:var(--lime-press);}
+  .btn-main[disabled]{background:var(--surface-2);color:var(--muted);box-shadow:inset 0 0 0 1px var(--line-2);cursor:default;}
+  .btn-main.counting{background:var(--surface-2);color:var(--lime);box-shadow:inset 0 0 0 2px var(--lime);}
   .btn-ghost{
-    flex:0 0 auto;padding:0 18px;background:var(--surface);color:var(--muted);
-    border:1px solid var(--line);font-size:16px;
+    flex:0 0 auto;padding:0 20px;background:var(--surface);color:var(--muted);
+    border:1px solid var(--line-2);font-size:16px;font-weight:700;
   }
   .btn svg{width:24px;height:24px;flex:none;}
 
@@ -160,104 +208,152 @@
     position:fixed;left:0;right:0;bottom:0;z-index:30;
     height:calc(var(--tabbar-h) + var(--safe-b));
     padding-bottom:var(--safe-b);
-    background:color-mix(in srgb,var(--surface) 92%,transparent);
-    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    background:rgba(12,16,21,.86);
+    -webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);
     border-top:1px solid var(--line);
     display:grid;grid-template-columns:repeat(3,1fr);
   }
   .tab{
-    appearance:none;border:none;background:none;cursor:pointer;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-    font-size:12px;font-weight:700;color:var(--muted);
+    appearance:none;border:none;background:none;cursor:pointer;position:relative;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    font-size:11.5px;font-weight:700;color:var(--dim);
   }
-  .tab svg{width:26px;height:26px;}
-  .tab.on{color:var(--accent);}
+  .tab svg{width:25px;height:25px;}
+  .tab.on{color:var(--lime);}
+  .tab.on::before{
+    content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
+    width:28px;height:3px;border-radius:0 0 3px 3px;background:var(--lime);
+    box-shadow:0 0 12px var(--lime);
+  }
 
   /* ---------- 클럽 선택 시트 ---------- */
   .sheet-bg{
-    position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.38);
+    position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.6);
+    -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
     opacity:0;pointer-events:none;transition:opacity .2s ease;
   }
   .sheet-bg.on{opacity:1;pointer-events:auto;}
   .sheet{
     position:fixed;left:0;right:0;bottom:0;z-index:41;
-    background:var(--surface);border-radius:26px 26px 0 0;
+    background:var(--surface);border-top:1px solid var(--line-2);border-radius:28px 28px 0 0;
     padding:10px 20px calc(20px + var(--safe-b));
-    transform:translateY(105%);transition:transform .25s cubic-bezier(.2,.8,.2,1);
+    transform:translateY(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);
     max-width:560px;margin:0 auto;
   }
   .sheet.on{transform:none;}
-  .grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 14px;}
-  .sheet h2{margin:0;font-size:20px;font-weight:800;letter-spacing:-.02em;}
-  .sheet-dist{margin:4px 0 16px;font-size:15px;color:var(--muted);font-weight:600;}
-  .sheet-dist b{color:var(--text);font-size:17px;}
-  .clubs{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grab{width:40px;height:5px;border-radius:3px;background:var(--line-2);margin:0 auto 16px;}
+  .sheet-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:16px;}
+  .sheet h2{margin:0;font-size:21px;font-weight:800;letter-spacing:-.02em;}
+  .sheet-sub{font-size:13px;color:var(--muted);margin-top:4px;}
+  .sheet-dist{text-align:right;}
+  .sheet-dist .num{font-size:46px;font-weight:700;line-height:.9;color:var(--lime);}
+  .sheet-dist .num small{font-size:18px;color:var(--muted);margin-left:2px;}
+  .clubs{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
   .club{
-    appearance:none;cursor:pointer;
-    min-height:58px;border-radius:16px;
-    background:var(--surface-2);border:2px solid transparent;
-    font-size:17px;font-weight:700;
+    appearance:none;cursor:pointer;text-align:left;
+    min-height:58px;border-radius:16px;padding:0 16px;
+    background:var(--surface-2);border:1px solid var(--line);
+    font-size:16px;font-weight:700;color:var(--text);
+    display:flex;align-items:center;justify-content:space-between;
   }
-  .club:active{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--surface));}
-  .club.driver{grid-column:1 / -1;background:color-mix(in srgb,var(--accent) 12%,var(--surface));color:var(--accent);min-height:64px;font-size:19px;}
-  .sheet-foot{display:flex;gap:10px;margin-top:14px;}
-  .sheet-foot .btn{flex:1;min-height:54px;font-size:16px;}
+  .club span{font-size:12px;color:var(--dim);font-weight:600;}
+  .club:active{background:var(--surface-3);border-color:var(--lime);}
+  .club.driver{
+    grid-column:1 / -1;min-height:66px;font-size:19px;
+    background:linear-gradient(90deg,rgba(200,245,58,.18),rgba(200,245,58,.04));
+    border-color:rgba(200,245,58,.45);color:var(--lime);
+  }
+  .club.driver span{color:#A9C75A;}
+  .sheet-foot{display:flex;gap:10px;margin-top:12px;}
+  .sheet-foot .btn{flex:1;min-height:54px;font-size:15px;}
 
   /* ---------- 기록 ---------- */
-  .sec-title{display:flex;align-items:baseline;justify-content:space-between;margin:6px 2px 0;}
-  .sec-title h3{margin:0;font-size:18px;font-weight:800;letter-spacing:-.02em;}
-  .linkbtn{appearance:none;border:none;background:none;color:var(--muted);font-size:14px;font-weight:600;padding:8px 4px;cursor:pointer;}
-  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .stat{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 16px;}
-  .stat-club{font-size:14px;font-weight:700;color:var(--muted);}
-  .stat-avg{font-size:44px;font-weight:700;line-height:1;margin-top:6px;}
-  .stat-avg small{font-size:18px;color:var(--muted);margin-left:2px;}
-  .stat-meta{font-size:13px;color:var(--muted);margin-top:6px;font-weight:500;}
+  .sec-title{display:flex;align-items:center;justify-content:space-between;margin:8px 2px 0;}
+  .sec-title h3{margin:0;font-size:13px;color:var(--muted);letter-spacing:.02em;font-family:inherit;font-weight:700;}
+  .linkbtn{appearance:none;border:none;background:none;color:var(--dim);font-size:13px;font-weight:700;padding:8px 4px;cursor:pointer;}
+  .bars{
+    background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:6px 16px;
+  }
+  .bar{display:grid;grid-template-columns:104px 1fr;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);}
+  .bar:last-child{border-bottom:none;}
+  .bar-club{font-size:14px;font-weight:700;}
+  .bar-meta{white-space:nowrap;font-size:11.5px;color:var(--dim);margin-top:3px;font-weight:600;}
+  .bar-line{position:relative;height:38px;display:flex;align-items:center;}
+  .bar-fill{
+    height:10px;border-radius:6px;min-width:10px;
+    background:linear-gradient(90deg,rgba(200,245,58,.35),var(--lime));
+    box-shadow:0 0 14px -2px rgba(200,245,58,.5);
+  }
+  .bar-val{margin-left:10px;font-size:28px;font-weight:700;white-space:nowrap;line-height:1;}
+  .bar-val small{font-size:13px;color:var(--muted);margin-left:1px;}
+  .bar-spd{font-size:11.5px;color:var(--orange);font-weight:700;margin-left:8px;white-space:nowrap;}
+
   .list{display:flex;flex-direction:column;gap:8px;}
   .row{
-    background:var(--surface);border:1px solid var(--line);border-radius:16px;
-    padding:12px 8px 12px 16px;display:flex;align-items:center;gap:10px;
+    background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    padding:10px 6px 10px 14px;display:flex;align-items:center;gap:12px;
+  }
+  .row-ic{
+    width:40px;height:40px;border-radius:12px;flex:none;
+    background:var(--surface-2);color:var(--lime);
+    display:flex;align-items:center;justify-content:center;
+    font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:15px;
   }
   .row-main{flex:1;min-width:0;}
-  .row-club{font-size:16px;font-weight:700;}
-  .row-meta{font-size:13px;color:var(--muted);margin-top:2px;}
-  .row-dist{font-size:32px;font-weight:700;white-space:nowrap;}
-  .row-dist small{font-size:15px;color:var(--muted);margin-left:1px;}
+  .row-club{font-size:15px;font-weight:700;}
+  .row-meta{font-size:12.5px;color:var(--dim);margin-top:2px;font-weight:500;}
+  .row-dist{font-size:30px;font-weight:700;white-space:nowrap;}
+  .row-dist small{font-size:13px;color:var(--muted);margin-left:1px;}
   .row-del{
-    appearance:none;border:none;background:none;cursor:pointer;color:var(--muted);
-    width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    appearance:none;border:none;background:none;cursor:pointer;color:var(--dim);
+    width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;
   }
-  .row-del svg{width:20px;height:20px;}
-  .empty{text-align:center;color:var(--muted);font-size:15px;padding:28px 12px;border:1px dashed var(--line);border-radius:18px;line-height:1.6;}
+  .row-del:active{background:var(--surface-2);color:var(--red);}
+  .row-del svg{width:18px;height:18px;}
+  .empty{
+    text-align:center;color:var(--muted);font-size:14.5px;padding:34px 16px;line-height:1.7;
+    border:1px dashed var(--line-2);border-radius:20px;
+  }
+  .empty b{color:var(--lime);}
 
   /* ---------- 시작 화면 ---------- */
   .start{
-    position:fixed;inset:0;z-index:60;background:var(--bg);
+    position:fixed;inset:0;z-index:60;
+    background:
+      radial-gradient(70% 45% at 50% 30%, rgba(200,245,58,.16), transparent 70%),
+      var(--bg);
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     padding:calc(var(--safe-t) + 24px) 28px calc(var(--safe-b) + 24px);text-align:center;
   }
   .start.off{display:none;}
-  .start-logo{width:84px;height:84px;border-radius:24px;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
-  .start-logo svg{width:46px;height:46px;}
-  .start h1{margin:0;font-size:30px;font-weight:800;letter-spacing:-.03em;}
-  .start p{margin:10px 0 0;font-size:16px;line-height:1.6;color:var(--muted);max-width:320px;}
-  .start .btn{flex:0 0 auto;width:100%;max-width:340px;margin-top:28px;}
+  .start-logo{
+    width:92px;height:92px;border-radius:28px;background:var(--lime);color:var(--on-lime);
+    display:flex;align-items:center;justify-content:center;margin-bottom:22px;
+    box-shadow:0 0 60px -6px rgba(200,245,58,.7);
+  }
+  .start-logo svg{width:50px;height:50px;}
+  .start .cap{font-size:13px;color:var(--lime);}
+  .start h1{margin:6px 0 0;font-size:34px;font-weight:800;letter-spacing:-.03em;}
+  .start p{margin:12px 0 0;font-size:16px;line-height:1.65;color:var(--muted);max-width:320px;}
+  .start .btn{flex:0 0 auto;width:100%;max-width:340px;margin-top:32px;}
   .start-err{
     display:none;margin-top:16px;max-width:340px;text-align:left;
-    background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;
+    background:var(--surface);border:1px solid rgba(255,92,92,.35);border-radius:16px;padding:14px 16px;
     font-size:14px;line-height:1.6;color:var(--muted);
   }
   .start-err.on{display:block;}
-  .start-err b{color:var(--danger);display:block;margin-bottom:4px;font-size:15px;}
+  .start-err > b{color:var(--red);display:block;margin-bottom:4px;font-size:15px;}
+  .start-err em{font-style:normal;color:var(--text);font-weight:700;}
 
   /* 토스트 */
   .toast{
     position:fixed;left:50%;z-index:70;
     top:calc(var(--safe-t) + 14px);
-    transform:translate(-50%,calc(-100% - 40px));transition:transform .25s ease;
-    background:var(--text);color:var(--bg);
-    padding:12px 18px;border-radius:14px;font-size:15px;font-weight:700;
-    max-width:calc(100% - 40px);text-align:center;box-shadow:var(--shadow);
+    transform:translate(-50%,calc(-100% - 40px));transition:transform .28s cubic-bezier(.2,.8,.2,1);
+    background:var(--lime);color:var(--on-lime);
+    padding:12px 18px;border-radius:16px;font-size:15px;font-weight:800;
+    max-width:calc(100% - 40px);text-align:center;
+    box-shadow:0 12px 30px -8px rgba(200,245,58,.5);
   }
   .toast.on{transform:translate(-50%,0);}
 </style>
@@ -266,52 +362,76 @@
 
 <header class="top">
   <div class="brand">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V3l11 4.5L6 12"/><path d="M3 21h9"/></svg>
-    그린파인더
+    <div class="brand-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 21V3l11 4.5L7 12"/></svg>
+    </div>
+    <div>
+      <div class="brand-name">그린파인더</div>
+      <div class="brand-sub cap">GPS Shot Tracker</div>
+    </div>
   </div>
-  <div class="gps" id="gps"><i></i><span id="gpsText">GPS 꺼짐</span></div>
+  <div class="gps" id="gps"><span class="gps-bars"><b></b><b></b><b></b></span><span id="gpsText">GPS 꺼짐</span></div>
 </header>
 
 <main>
   <!-- 샷 거리 -->
   <section class="screen on" id="scrShot">
-    <div class="hero">
-      <div class="hero-label" id="shotLabel">샷 거리</div>
-      <div class="hero-value num" id="shotValue">--<small>m</small></div>
-      <div class="hero-sub" id="shotSub">공 치기 전에 아래 버튼을 눌러주세요</div>
-      <div class="speed" id="speedBox">
-        <span>예상 볼스피드</span>
-        <strong class="num" id="speedMph">--</strong><em>mph</em>
-        <span id="speedKmh"></span>
+    <div class="gauge-wrap" id="shotGauge">
+      <svg viewBox="0 0 240 240" aria-hidden="true">
+        <g id="shotTicks"></g>
+        <circle class="g-track" cx="120" cy="120" r="100" stroke-dasharray="471.24 628.32" transform="rotate(135 120 120)"/>
+        <circle class="g-fill" id="shotArc" cx="120" cy="120" r="100" stroke-dasharray="0 628.32" transform="rotate(135 120 120)"/>
+      </svg>
+      <div class="g-center">
+        <div class="g-label" id="shotLabel">샷 거리</div>
+        <div class="g-value num" id="shotValue">--</div>
+        <div class="g-unit cap">Meters</div>
       </div>
+      <div class="g-foot" id="shotSub">공 치기 전에 아래 버튼을 눌러주세요</div>
     </div>
-    <div class="steps">
-      <div class="step now" id="st1"><b>1단계</b>친 자리</div>
-      <div class="step" id="st2"><b>2단계</b>공 있는 곳</div>
-      <div class="step" id="st3"><b>3단계</b>클럽 저장</div>
+
+    <div class="tiles">
+      <div class="tile"><div class="tile-k cap">Yards</div><div class="tile-v num" id="tYd">--</div></div>
+      <div class="tile" id="tSpdBox"><div class="tile-k cap">Ball Speed</div><div><div class="tile-v num" id="tSpd">--</div><div class="tile-s" id="tSpdS">드라이버 저장 시</div></div></div>
+      <div class="tile"><div class="tile-k cap">Club</div><div class="tile-v" id="tClub" style="font-size:19px;font-weight:800;">--</div></div>
     </div>
+
+    <div class="track">
+      <div class="stp now" id="st1"><i>1</i>친 자리</div>
+      <div class="stp" id="st2"><i>2</i>공 위치</div>
+      <div class="stp" id="st3"><i>3</i>클럽</div>
+    </div>
+
     <div class="hint" id="shotHint">
-      <b>사용법</b> · 티샷 하기 전에 <b>친 자리 찍기</b>를 누르고, 공이 멈춘 곳까지 걸어가서 <b>공 위치 찍기</b>를 누르면 거리가 나와요. 드라이버는 거리로 <b>볼스피드</b>를 대략 계산해 드려요.
+      티샷 전에 <b>친 자리 찍기</b> → 공이 멈춘 곳까지 가서 <b>공 위치 찍기</b> → 클럽을 고르면 끝이에요. 드라이버는 거리로 <b>볼스피드</b>를 대략 계산해 드려요.
     </div>
   </section>
 
   <!-- 핀까지 -->
   <section class="screen" id="scrPin">
-    <div class="hero">
-      <div class="hero-label">핀까지 남은 거리</div>
-      <div class="hero-value num" id="pinValue">--<small>m</small></div>
-      <div class="hero-sub" id="pinSub">핀(그린) 옆에서 핀 저장을 눌러주세요</div>
+    <div class="gauge-wrap pin-gauge">
+      <svg viewBox="0 0 240 240" aria-hidden="true">
+        <g id="pinTicks"></g>
+        <circle class="g-track" cx="120" cy="120" r="100" stroke-dasharray="471.24 628.32" transform="rotate(135 120 120)"/>
+        <circle class="g-fill" id="pinArc" cx="120" cy="120" r="100" stroke-dasharray="0 628.32" transform="rotate(135 120 120)"/>
+      </svg>
+      <div class="g-center">
+        <div class="g-label">핀까지 남은 거리</div>
+        <div class="g-value num" id="pinValue">--</div>
+        <div class="g-unit cap">Meters</div>
+      </div>
+      <div class="g-foot" id="pinSub">핀 옆에서 핀 저장을 눌러주세요</div>
     </div>
-    <div class="hint">
-      <b>사용법</b> · 그린에 올라가서 핀 옆에 섰을 때 <b>여기를 핀으로 저장</b>을 누르세요. 다음 라운드에 같은 홀을 칠 때나 연습장에서 목표 지점을 정해 둘 때 쓰면 좋아요.
+    <div class="hint" style="border-left-color:var(--orange);background:rgba(255,122,26,.06)">
+      그린의 핀 옆에서 <b>여기를 핀으로 저장</b>을 누르면, 어디서든 그 지점까지 남은 거리가 실시간으로 나와요. 연습장에서 목표 깃발을 정해 둘 때도 좋아요.
     </div>
   </section>
 
   <!-- 기록 -->
   <section class="screen" id="scrLog">
-    <div class="sec-title"><h3>클럽별 평균</h3></div>
-    <div class="stats" id="stats"></div>
-    <div class="sec-title"><h3>전체 기록</h3><button class="linkbtn" id="clearAll" type="button">전체 삭제</button></div>
+    <div class="sec-title"><h3 class="cap">클럽별 평균 거리</h3></div>
+    <div id="stats"></div>
+    <div class="sec-title"><h3 class="cap">전체 샷 기록</h3><button class="linkbtn" id="clearAll" type="button">전체 삭제</button></div>
     <div class="list" id="list"></div>
   </section>
 </main>
@@ -327,15 +447,15 @@
 <!-- 하단 탭바 -->
 <nav class="tabbar">
   <button class="tab on" data-tab="shot" type="button">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18" r="2.5"/><path d="M8.5 16.5C12 12 15 8 20 5"/><path d="M16 5h4v4"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="18.5" r="2.5"/><path d="M8 17c3-6 7-10 13-12"/><path d="M17 4.5l4 .5-.8 3.9"/></svg>
     샷 거리
   </button>
   <button class="tab" data-tab="pin" type="button">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 21V3l10 4-10 4"/><ellipse cx="12" cy="21" rx="8" ry="1.5"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20V3l10 4-10 4"/><ellipse cx="12" cy="20.5" rx="8" ry="1.6"/></svg>
     핀까지
   </button>
   <button class="tab" data-tab="log" type="button">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M4 12h16M4 18h7"/></svg>
     기록
   </button>
 </nav>
@@ -344,8 +464,13 @@
 <div class="sheet-bg" id="sheetBg"></div>
 <div class="sheet" id="sheet" role="dialog" aria-label="클럽 선택">
   <div class="grab"></div>
-  <h2>어떤 클럽으로 쳤나요?</h2>
-  <div class="sheet-dist" id="sheetDist"></div>
+  <div class="sheet-head">
+    <div>
+      <h2>어떤 클럽이었나요?</h2>
+      <div class="sheet-sub" id="sheetYd"></div>
+    </div>
+    <div class="sheet-dist"><div class="num" id="sheetDist">--</div></div>
+  </div>
   <div class="clubs" id="clubs"></div>
   <div class="sheet-foot">
     <button class="btn btn-ghost" id="sheetRetry" type="button">공 위치 다시 찍기</button>
@@ -355,10 +480,11 @@
 <!-- 시작 화면 -->
 <div class="start" id="start">
   <div class="start-logo">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V3l11 4.5L6 12"/><path d="M3 21h9"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 21V3l11 4.5L7 12"/></svg>
   </div>
+  <div class="cap">GPS Shot Tracker</div>
   <h1>그린파인더</h1>
-  <p>휴대폰 GPS로 내 샷 거리를 재고, 드라이버 볼스피드를 대략 계산해 드려요.</p>
+  <p>내 샷 거리를 재고,<br>드라이버 볼스피드를 대략 계산해 드려요.</p>
   <button class="btn btn-main" id="btnStart" type="button">위치 켜고 시작하기</button>
   <div class="start-err" id="startErr"></div>
 </div>
@@ -370,9 +496,15 @@
   "use strict";
 
   /* ---------- 설정 ---------- */
-  var CLUBS = ["드라이버","우드","유틸리티","롱아이언 (3~5)","미들아이언 (6~7)","숏아이언 (8~9)","웨지","기타"];
+  var CLUBS = [
+    {n:"드라이버",s:"1W"},{n:"우드",s:"3·5W"},{n:"유틸리티",s:"UT"},{n:"롱아이언",s:"3~5I"},
+    {n:"미들아이언",s:"6~7I"},{n:"숏아이언",s:"8~9I"},{n:"웨지",s:"PW·SW"},{n:"기타",s:""}
+  ];
+  var ICON = {"드라이버":"1W","우드":"3W","유틸리티":"UT","롱아이언":"4I","미들아이언":"6I","숏아이언":"8I","웨지":"PW","기타":"·"};
   var SAMPLE_MS = 3000;          // 찍을 때 3초 동안 위치를 모아서 평균
   var YD = 1.09361;
+  var ARC = 471.24, CIRC = 628.32;
+  var SHOT_MAX = 300, PIN_MAX = 250;
 
   /* ---------- 저장소 ---------- */
   function load(k,f){try{var v=localStorage.getItem(k);return v?JSON.parse(v):f;}catch(e){return f;}}
@@ -380,14 +512,17 @@
 
   var S = {
     tab:"shot",
-    pos:null,                       // 최신 위치 {lat,lon,acc,t}
-    samples:[],                     // 최근 위치들
+    pos:null,
+    samples:[],
     shotStart:load("gf2_start",null),
-    pending:null,                   // {dist, end}
+    pending:null,
     pin:load("gf2_pin",null),
     log:load("gf2_log",[]),
-    busy:false
+    busy:false,
+    lastShot:null
   };
+  // 예전 버전 기록의 클럽 이름 맞추기
+  S.log.forEach(function(x){x.club=String(x.club||"기타").replace(/\s*\(.*\)$/,"");});
 
   /* ---------- 계산 ---------- */
   function rad(d){return d*Math.PI/180;}
@@ -400,7 +535,7 @@
   function ballSpeed(club,meters){
     var f = club==="드라이버" ? 1.65 : club==="우드" ? 1.55 : 0;
     if(!f || meters < 60) return null;
-    var carryYd = meters*YD*0.9;    // 굴러간 거리 약 10% 빼기
+    var carryYd = meters*YD*0.9;
     var mph = carryYd / f;
     return {mph:Math.round(mph), kmh:Math.round(mph*1.609)};
   }
@@ -412,15 +547,37 @@
   function $(id){return document.getElementById(id);}
   var E = {
     gps:$("gps"),gpsText:$("gpsText"),
-    shotLabel:$("shotLabel"),shotValue:$("shotValue"),shotSub:$("shotSub"),shotHint:$("shotHint"),
-    speedBox:$("speedBox"),speedMph:$("speedMph"),speedKmh:$("speedKmh"),
+    shotLabel:$("shotLabel"),shotValue:$("shotValue"),shotSub:$("shotSub"),shotHint:$("shotHint"),shotArc:$("shotArc"),
+    tYd:$("tYd"),tSpd:$("tSpd"),tSpdS:$("tSpdS"),tSpdBox:$("tSpdBox"),tClub:$("tClub"),
     st1:$("st1"),st2:$("st2"),st3:$("st3"),
-    pinValue:$("pinValue"),pinSub:$("pinSub"),
+    pinValue:$("pinValue"),pinSub:$("pinSub"),pinArc:$("pinArc"),
     stats:$("stats"),list:$("list"),clearAll:$("clearAll"),
     btnMain:$("btnMain"),btnCancel:$("btnCancel"),dock:$("dock"),
-    sheet:$("sheet"),sheetBg:$("sheetBg"),sheetDist:$("sheetDist"),clubs:$("clubs"),sheetRetry:$("sheetRetry"),
+    sheet:$("sheet"),sheetBg:$("sheetBg"),sheetDist:$("sheetDist"),sheetYd:$("sheetYd"),clubs:$("clubs"),sheetRetry:$("sheetRetry"),
     start:$("start"),btnStart:$("btnStart"),startErr:$("startErr"),toast:$("toast")
   };
+
+  /* ---------- 게이지 눈금 ---------- */
+  function buildTicks(g,max,step){
+    var ns="http://www.w3.org/2000/svg",html="";
+    for(var v=0;v<=max;v+=step/2){
+      var major=(v%step===0);
+      var a=rad(135+270*v/max);
+      var r1=major?84:87,r2=91;
+      html+="<line class='g-tick"+(major?" major":"")+"' x1='"+(120+r1*Math.cos(a)).toFixed(1)+"' y1='"+(120+r1*Math.sin(a)).toFixed(1)+"' x2='"+(120+r2*Math.cos(a)).toFixed(1)+"' y2='"+(120+r2*Math.sin(a)).toFixed(1)+"'/>";
+      if(major){
+        var rl=120;
+        html+="<text class='g-lbl' x='"+(120+rl*Math.cos(a)).toFixed(1)+"' y='"+(120+rl*Math.sin(a)).toFixed(1)+"'>"+v+"</text>";
+      }
+    }
+    g.innerHTML=html;
+  }
+  buildTicks($("shotTicks"),SHOT_MAX,50);
+  buildTicks($("pinTicks"),PIN_MAX,50);
+  function setArc(el,m,max){
+    var f=m==null?0:Math.max(0,Math.min(1,m/max));
+    el.setAttribute("stroke-dasharray",(ARC*f).toFixed(1)+" "+CIRC);
+  }
 
   var toastTimer=null;
   function toast(msg){
@@ -429,7 +586,7 @@
   }
   function buzz(){try{navigator.vibrate&&navigator.vibrate(30);}catch(e){}}
 
-  /* ---------- 화면 켜짐 유지 (걸어가는 동안 화면이 꺼지면 GPS가 멈춤) ---------- */
+  /* ---------- 화면 켜짐 유지 ---------- */
   var wake=null;
   function keepAwake(on){
     try{
@@ -446,9 +603,7 @@
   var watchId=null;
   function startGps(){
     E.startErr.classList.remove("on");
-    if(!("geolocation" in navigator)){
-      showErr("이 브라우저는 위치 기능을 지원하지 않아요.");return;
-    }
+    if(!("geolocation" in navigator)){showErr("이 브라우저는 위치 기능을 지원하지 않아요.");return;}
     E.btnStart.textContent="위치 확인 중...";
     if(watchId!==null) navigator.geolocation.clearWatch(watchId);
     watchId=navigator.geolocation.watchPosition(onPos,onPosErr,{enableHighAccuracy:true,maximumAge:0,timeout:20000});
@@ -463,10 +618,10 @@
     render();
   }
   function onPosErr(err){
-    if(S.pos && err.code===3) return;           // 잠깐 끊긴 것은 무시
+    if(S.pos && err.code===3) return;
     E.btnStart.textContent="다시 시도하기";
     if(err.code===1){
-      showErr("위치 권한이 꺼져 있어요.","아이폰 <b style='display:inline;color:inherit'>설정 → 개인정보 보호 및 보안 → 위치 서비스 → Safari 웹 사이트</b>를 \"앱을 사용하는 동안\"으로 바꾼 뒤, 사파리 주소창 왼쪽 <b style='display:inline;color:inherit'>가가</b> 버튼 → 웹 사이트 설정 → 위치 → 허용으로 바꿔 주세요.");
+      showErr("위치 권한이 꺼져 있어요.","아이폰 <em>설정 → 개인정보 보호 및 보안 → 위치 서비스 → Safari 웹 사이트</em>를 \"앱을 사용하는 동안\"으로 바꾼 뒤, 사파리 주소창 왼쪽 <em>가가</em> 버튼 → 웹 사이트 설정 → 위치 → 허용으로 바꿔 주세요.");
     }else if(err.code===2){
       showErr("위치를 찾지 못했어요.","하늘이 보이는 바깥에서 다시 시도해 주세요.");
     }else{
@@ -480,23 +635,25 @@
     E.startErr.classList.add("on");
   }
 
-  // 버튼을 누르면 3초간 위치를 모아 정확도 가중 평균
+  // 버튼을 누른 뒤 3초간 들어온 위치만 모아 정확도 가중 평균
   function capture(cb){
     S.busy=true;
     var t0=Date.now();
     var left=Math.ceil(SAMPLE_MS/1000);
-    E.btnMain.disabled=true;
-    E.btnMain.textContent="위치 잡는 중... "+left;
+    E.btnMain.disabled=false;
+    E.btnMain.classList.add("counting");
+    E.btnMain.textContent="위치 잡는 중 · "+left;
+    E.btnCancel.hidden=true;
     var iv=setInterval(function(){
       left--;
-      if(left>0){E.btnMain.textContent="위치 잡는 중... "+left;return;}
+      if(left>0){E.btnMain.textContent="위치 잡는 중 · "+left;return;}
       clearInterval(iv);
-      // 버튼을 누른 뒤에 들어온 위치만 사용 (걸어오던 중의 위치는 제외)
       var got=S.samples.filter(function(s){return s.t>=t0;});
       if(!got.length && S.pos) got=[S.pos];
       var w=0,lat=0,lon=0,best=999;
       got.forEach(function(s){var k=1/(s.acc*s.acc);w+=k;lat+=s.lat*k;lon+=s.lon*k;best=Math.min(best,s.acc);});
       S.busy=false;
+      E.btnMain.classList.remove("counting");
       buzz();
       cb({lat:lat/w,lon:lon/w,acc:best,t:Date.now()});
     },1000);
@@ -508,9 +665,9 @@
     if(S.tab==="shot"){
       if(!S.shotStart){
         capture(function(p){
-          S.shotStart=p;save("gf2_start",p);
+          S.shotStart=p;S.lastShot=null;save("gf2_start",p);
           keepAwake(true);
-          toast("친 자리를 저장했어요. 공 있는 곳으로 가세요!");
+          toast("친 자리 저장! 공 있는 곳으로 가세요");
           render();
         });
       }else{
@@ -540,15 +697,18 @@
 
   function openSheet(){
     var d=S.pending.dist;
-    E.sheetDist.innerHTML="측정 거리 <b class='num'>"+fmtM(d)+"m</b> · "+Math.round(d*YD)+"야드";
+    E.sheetDist.innerHTML=fmtM(d)+"<small>m</small>";
+    E.sheetYd.textContent=Math.round(d*YD)+"야드 · 클럽을 누르면 바로 저장돼요";
     E.sheet.classList.add("on");E.sheetBg.classList.add("on");
   }
   function closeSheet(){E.sheet.classList.remove("on");E.sheetBg.classList.remove("on");}
 
   CLUBS.forEach(function(c){
     var b=document.createElement("button");
-    b.type="button";b.className="club"+(c==="드라이버"?" driver":"");b.textContent=c;
-    b.addEventListener("click",function(){saveShot(c);});
+    b.type="button";b.className="club"+(c.n==="드라이버"?" driver":"");
+    b.innerHTML="";b.appendChild(document.createTextNode(c.n));
+    if(c.s){var sp=document.createElement("span");sp.className="num";sp.textContent=c.s;b.appendChild(sp);}
+    b.addEventListener("click",function(){saveShot(c.n);});
     E.clubs.appendChild(b);
   });
   function saveShot(club){
@@ -559,7 +719,7 @@
     S.shotStart=null;S.pending=null;save("gf2_start",null);
     keepAwake(false);
     closeSheet();buzz();
-    toast(club+" "+fmtM(entry.dist)+"m 저장했어요");
+    toast(club+" "+fmtM(entry.dist)+"m 저장 완료");
     render();
   }
   E.sheetRetry.addEventListener("click",function(){S.pending=null;closeSheet();render();});
@@ -572,7 +732,7 @@
   E.clearAll.addEventListener("click",function(){
     if(!S.log.length) return;
     if(!confirm("기록 "+S.log.length+"개를 모두 지울까요?")) return;
-    S.log=[];save("gf2_log",S.log);render();
+    S.log=[];S.lastShot=null;save("gf2_log",S.log);render();
   });
 
   /* ---------- 탭 ---------- */
@@ -595,84 +755,102 @@
     if(!S.pos){E.gpsText.textContent="GPS 꺼짐";return;}
     var a=Math.round(S.pos.acc);
     E.gps.classList.add(a<=8?"good":a<=20?"fair":"bad");
-    E.gpsText.textContent="정확도 ±"+a+"m";
+    E.gpsText.textContent="±"+a+"m";
   }
-
   function setStep(n){
     [E.st1,E.st2,E.st3].forEach(function(el,i){
       el.classList.toggle("now",i===n);
       el.classList.toggle("done",i<n);
     });
   }
+  function setSpeed(sp){
+    if(sp){
+      E.tSpd.innerHTML=sp.mph+"<small>mph</small>";
+      E.tSpdS.textContent="약 "+sp.kmh+"km/h";
+      E.tSpdBox.classList.add("hot");
+    }else{
+      E.tSpd.innerHTML="--";
+      E.tSpdS.textContent="드라이버 저장 시";
+      E.tSpdBox.classList.remove("hot");
+    }
+  }
 
   function renderShot(){
-    var sp=null;
+    var d=null,club="--",sp=null;
     if(S.shotStart && S.pos && !S.pending){
-      var d=dist(S.shotStart,S.pos);
+      d=dist(S.shotStart,S.pos);
       E.shotLabel.textContent="친 자리에서 지금까지";
-      E.shotValue.innerHTML=fmtM(d)+"<small>m</small>";
-      E.shotSub.innerHTML="<b>"+Math.round(d*YD)+"</b>야드 · 걸으면 숫자가 바뀌어요";
+      E.shotSub.textContent="이동하면 숫자가 바뀌어요";
       E.shotHint.style.display="none";
       setStep(1);
     }else if(S.pending){
+      d=S.pending.dist;
       E.shotLabel.textContent="측정 완료";
-      E.shotValue.innerHTML=fmtM(S.pending.dist)+"<small>m</small>";
-      E.shotSub.innerHTML="<b>"+Math.round(S.pending.dist*YD)+"</b>야드 · 클럽을 골라주세요";
+      E.shotSub.textContent="클럽을 골라주세요";
       setStep(2);
     }else if(S.lastShot){
       var L=S.lastShot;
-      E.shotLabel.textContent="방금 샷 · "+L.club;
-      E.shotValue.innerHTML=fmtM(L.dist)+"<small>m</small>";
-      E.shotSub.innerHTML="<b>"+Math.round(L.dist*YD)+"</b>야드 · GPS 오차 약 ±"+L.acc+"m";
-      sp=ballSpeed(L.club,L.dist);
+      d=L.dist;club=L.club;sp=ballSpeed(L.club,L.dist);
+      E.shotLabel.textContent="방금 샷";
+      E.shotSub.textContent="GPS 오차 약 ±"+L.acc+"m";
       E.shotHint.style.display="none";
       setStep(0);
     }else{
       E.shotLabel.textContent="샷 거리";
-      E.shotValue.innerHTML="--<small>m</small>";
       E.shotSub.textContent="공 치기 전에 아래 버튼을 눌러주세요";
       E.shotHint.style.display="";
       setStep(0);
     }
-    if(sp){
-      E.speedMph.textContent=sp.mph;
-      E.speedKmh.textContent="(약 "+sp.kmh+"km/h)";
-      E.speedBox.classList.add("on");
-    }else E.speedBox.classList.remove("on");
+    E.shotValue.textContent=fmtM(d);
+    setArc(E.shotArc,d,SHOT_MAX);
+    E.tYd.textContent=d==null?"--":Math.round(d*YD);
+    E.tClub.textContent=club;
+    setSpeed(sp);
   }
 
   function renderPin(){
     if(S.pin && S.pos){
       var d=dist(S.pos,S.pin);
-      E.pinValue.innerHTML=fmtM(d)+"<small>m</small>";
-      E.pinSub.innerHTML="<b>"+Math.round(d*YD)+"</b>야드 · "+hhmm(S.pin.t)+"에 저장한 핀";
+      E.pinValue.textContent=fmtM(d);
+      E.pinSub.textContent=Math.round(d*YD)+"야드 · "+hhmm(S.pin.t)+" 저장";
+      setArc(E.pinArc,d,PIN_MAX);
     }else{
-      E.pinValue.innerHTML="--<small>m</small>";
-      E.pinSub.textContent="핀(그린) 옆에서 핀 저장을 눌러주세요";
+      E.pinValue.textContent="--";
+      E.pinSub.textContent="핀 옆에서 핀 저장을 눌러주세요";
+      setArc(E.pinArc,null,PIN_MAX);
     }
   }
 
   function renderLog(){
-    // 클럽별 평균
-    var by={};
+    var by={},maxAvg=0,rows=[];
     S.log.forEach(function(x){(by[x.club]=by[x.club]||[]).push(x.dist);});
-    var html="";
     CLUBS.forEach(function(c){
-      if(!by[c]) return;
-      var a=by[c],avg=a.reduce(function(s,v){return s+v;},0)/a.length,max=Math.max.apply(null,a);
-      var sp=ballSpeed(c,avg);
-      html+="<div class='stat'><div class='stat-club'>"+c+"</div>"+
-        "<div class='stat-avg num'>"+Math.round(avg)+"<small>m</small></div>"+
-        "<div class='stat-meta'>"+a.length+"회 · 최고 "+Math.round(max)+"m"+(sp?"<br>볼스피드 약 "+sp.mph+"mph":"")+"</div></div>";
+      var a=by[c.n];if(!a) return;
+      var avg=a.reduce(function(s,v){return s+v;},0)/a.length;
+      maxAvg=Math.max(maxAvg,avg);
+      rows.push({c:c.n,a:a,avg:avg,max:Math.max.apply(null,a)});
     });
-    E.stats.innerHTML=html||"<div class='empty' style='grid-column:1/-1'>아직 기록이 없어요.<br>샷 거리 탭에서 첫 샷을 재 보세요.</div>";
+    if(rows.length){
+      var html="<div class='bars'>";
+      rows.forEach(function(r){
+        var sp=ballSpeed(r.c,r.avg);
+        var w=Math.max(6,Math.round(60*r.avg/maxAvg));
+        html+="<div class='bar'><div><div class='bar-club'>"+r.c+"</div><div class='bar-meta'>"+r.a.length+"회 · 최고 "+Math.round(r.max)+"m</div></div>"+
+          "<div class='bar-line'><div class='bar-fill' style='width:"+w+"%'></div><div class='bar-val num'>"+Math.round(r.avg)+"<small>m</small></div>"+
+          (sp?"<div class='bar-spd num'>"+sp.mph+"mph</div>":"")+"</div></div>";
+      });
+      E.stats.innerHTML=html+"</div>";
+    }else{
+      E.stats.innerHTML="<div class='empty'>아직 기록이 없어요.<br><b>샷 거리</b> 탭에서 첫 샷을 재 보세요.</div>";
+    }
 
     E.list.innerHTML="";
     S.log.slice().reverse().forEach(function(x){
       var r=document.createElement("div");r.className="row";
-      r.innerHTML="<div class='row-main'><div class='row-club'></div><div class='row-meta'></div></div>"+
+      r.innerHTML="<div class='row-ic'></div><div class='row-main'><div class='row-club'></div><div class='row-meta'></div></div>"+
         "<div class='row-dist num'>"+fmtM(x.dist)+"<small>m</small></div>"+
-        "<button class='row-del' type='button' aria-label='삭제'><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round'><path d='M6 6l12 12M18 6L6 18'/></svg></button>";
+        "<button class='row-del' type='button' aria-label='삭제'><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round'><path d='M6 6l12 12M18 6L6 18'/></svg></button>";
+      r.querySelector(".row-ic").textContent=ICON[x.club]||"·";
       r.querySelector(".row-club").textContent=x.club;
       r.querySelector(".row-meta").textContent=mmdd(x.t)+" "+hhmm(x.t)+" · "+Math.round(x.dist*YD)+"야드";
       r.querySelector(".row-del").addEventListener("click",function(){delShot(x.id);});
@@ -690,14 +868,12 @@
     b.disabled=false;
     if(S.tab==="shot"){
       if(!S.shotStart){b.textContent="친 자리 찍기";}
-      else{b.textContent="공 위치 찍기";E.btnCancel.hidden=false;}
+      else{b.textContent="공 위치 찍기";E.btnCancel.hidden=false;E.btnCancel.textContent="취소";}
     }else if(S.tab==="pin"){
       b.textContent=S.pin?"핀 다시 저장":"여기를 핀으로 저장";
       E.btnCancel.hidden=!S.pin;
       E.btnCancel.textContent="지우기";
-      return;
     }
-    E.btnCancel.textContent="취소";
   }
 
   function render(){
@@ -709,7 +885,6 @@
   E.btnCancel.addEventListener("click",onCancel);
   E.btnStart.addEventListener("click",startGps);
 
-  // 예전에 위치를 허용했던 기기면 시작 화면 없이 바로 켜기
   var ok=false;try{ok=localStorage.getItem("gf2_ok")==="1";}catch(e){}
   if(ok){E.start.classList.add("off");startGps();}
   if(S.shotStart) keepAwake(true);
